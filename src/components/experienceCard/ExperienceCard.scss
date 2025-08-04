@@ -24,7 +24,7 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: 150%;
-  background: $experienceCardBannerLG;
+  background: #fbbf24;
   border-radius: 10px 10px 0px 0px;
   -webkit-filter: blur(0px);
   -moz-filter: blur(0px);
@@ -89,6 +89,7 @@
   height: 8rem;
   box-shadow: 0 0.5rem 1rem $lightBoxShadowDarker;
   border-radius: 50%;
+  background-color: black; // changed from white
 }
 
 .experience-text-role {

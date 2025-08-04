@@ -1,74 +1,64 @@
-import React, {useState, useEffect, useContext, Suspense, lazy} from "react";
-import "./Project.scss";
-import Button from "../../components/button/Button";
-import {openSource, socialMediaLinks} from "../../portfolio";
+// src/containers/projects/Projects.js
+
+import React, { useState, useEffect, useContext, Suspense, lazy } from "react";
+import "./Project.scss"; // make sure file is named exactly this
+import { socialMediaLinks, openSource } from "../../portfolio";
 import StyleContext from "../../contexts/StyleContext";
-import Loading from "../../containers/loading/Loading";
+import Button from "../../components/button/Button";
+import Loading from "../loading/Loading";
+
+const GithubRepoCard = lazy(() =>
+  import("../../components/githubRepoCard/GithubRepoCard")
+);
+
 export default function Projects() {
-  const GithubRepoCard = lazy(() =>
-    import("../../components/githubRepoCard/GithubRepoCard")
-  );
-  const FailedLoading = () => null;
-  const renderLoader = () => <Loading />;
-  const [repo, setrepo] = useState([]);
-  // todo: remove useContex because is not supported
-  const {isDark} = useContext(StyleContext);
+  const [repos, setRepos] = useState([]);
+  const { isDark } = useContext(StyleContext);
 
   useEffect(() => {
-    const getRepoData = () => {
-      fetch("/profile.json")
-        .then(result => {
-          if (result.ok) {
-            return result.json();
-          }
-          throw result;
-        })
-        .then(response => {
-          setrepoFunction(response.data.user.pinnedItems.edges);
-        })
-        .catch(function (error) {
-          console.error(
-            `${error} (because of this error, nothing is shown in place of Projects section. Also check if Projects section has been configured)`
-          );
-          setrepoFunction("Error");
-        });
-    };
-    getRepoData();
+    fetch("/profile.json")
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch pinned repos.");
+        return res.json();
+      })
+      .then((data) => {
+        setRepos(data.data.user.pinnedItems.edges);
+      })
+      .catch((error) => {
+        console.error(
+          `GitHub Repo Fetch Error: ${error} — No projects rendered.`
+        );
+        setRepos([]);
+      });
   }, []);
 
-  function setrepoFunction(array) {
-    setrepo(array);
-  }
-  if (
-    !(typeof repo === "string" || repo instanceof String) &&
-    openSource.display
-  ) {
-    return (
-      <Suspense fallback={renderLoader()}>
-        <div className="main" id="opensource">
-          <h1 className="project-title">Open Source Projects</h1>
-          <div className="repo-cards-div-main">
-            {repo.map((v, i) => {
-              if (!v) {
-                console.error(
-                  `Github Object for repository number : ${i} is undefined`
-                );
-              }
-              return (
-                <GithubRepoCard repo={v} key={v.node.id} isDark={isDark} />
-              );
-            })}
-          </div>
+  if (!openSource.display || !Array.isArray(repos)) return null;
+
+  return (
+    <Suspense fallback={<Loading />}>
+      <div className="main" id="projects">
+        <div className="projects-header">
+          <h1 className="project-title">Portfolio</h1>
+          <p className="subTitle project-subtitle">Selected Projects</p>
+        </div>
+        <div className="repo-cards-div-main">
+          {repos.map((repoItem) => (
+            <GithubRepoCard
+              repo={repoItem}
+              key={repoItem.node.id}
+              isDark={isDark}
+            />
+          ))}
+        </div>
+        <div className="more-projects-btn">
           <Button
-            text={"More Projects"}
+            text="More Projects"
             className="project-button"
             href={socialMediaLinks.github}
             newTab={true}
           />
         </div>
-      </Suspense>
-    );
-  } else {
-    return <FailedLoading />;
-  }
+      </div>
+    </Suspense>
+  );
 }

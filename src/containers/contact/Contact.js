@@ -1,14 +1,13 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import "./Contact.scss";
 import SocialMedia from "../../components/socialMedia/SocialMedia";
-import {illustration, contactInfo} from "../../portfolio";
-import {Fade} from "react-reveal";
-import email from "../../assets/lottie/email";
-import DisplayLottie from "../../components/displayLottie/DisplayLottie";
+import { contactInfo } from "../../portfolio";
+import { Fade } from "react-reveal";
 import StyleContext from "../../contexts/StyleContext";
 
 export default function Contact() {
-  const {isDark} = useContext(StyleContext);
+  const { isDark } = useContext(StyleContext);
+
   return (
     <Fade bottom duration={1000} distance="20px">
       <div className="main contact-margin-top" id="contact">
@@ -29,6 +28,7 @@ export default function Contact() {
                 isDark ? "dark-mode contact-text-div" : "contact-text-div"
               }
             >
+              {/* Phone number (optional) */}
               {contactInfo.number && (
                 <>
                   <a
@@ -41,6 +41,8 @@ export default function Contact() {
                   <br />
                 </>
               )}
+
+              {/* Email */}
               <a
                 className="contact-detail-email"
                 href={"mailto:" + contactInfo.email_address}
@@ -49,18 +51,36 @@ export default function Contact() {
               </a>
               <br />
               <br />
+
+              {/* Location (if provided) */}
+              {contactInfo.location && (
+                <div className="location-div">
+                  <span className="desc-prof">
+                    <i className="fas fa-map-marker-alt"></i> {contactInfo.location}
+                  </span>
+                </div>
+              )}
+
+              {/* Hireable status (if true) */}
+              {contactInfo.isHireable && (
+                <div className="opp-div">
+                  <span className="desc-prof">
+                    Open for opportunities: Yes
+                  </span>
+                </div>
+              )}
+
+              <br />
               <SocialMedia />
             </div>
           </div>
+
           <div className="contact-image-div">
-            {illustration.animated ? (
-              <DisplayLottie animationData={email} />
-            ) : (
-              <img
-                alt="Man working"
-                src={require("../../assets/images/contactMailDark.svg")}
-              ></img>
-            )}
+            <img
+              alt="Sean"
+              src={require("../../assets/images/sean.png")}
+              className="contact-sean-image"
+            />
           </div>
         </div>
       </div>

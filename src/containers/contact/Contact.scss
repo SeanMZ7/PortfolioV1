@@ -2,6 +2,9 @@
 
 .contact-div-main {
   display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .dark-mode a {
@@ -45,14 +48,23 @@
   margin-top: 4rem;
 }
 
-.contact-image-div > img {
-  max-width: 100%;
-  height: auto;
-  margin-left: 1.5rem;
-  margin-top: -4rem;
+.contact-image-div {
+  display: flex;
+  justify-content: flex-end;
+  max-width: 300px;
+  width: 100%;
+  margin-right: 30px;
+  margin-top: 4.5rem;
 }
 
-/* Media Query */
+.contact-sean-image {
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  border: 5px solid #7f5af0; // soft purple
+  object-fit: cover;
+}
+
 @media (max-width: 1380px), (max-width: 768px) {
   .contact-title {
     font-size: 56px;
@@ -85,3 +97,39 @@
     display: none;
   }
 }
+  .summary-toggle-button {
+    margin-top: 1rem;
+    background-color: #f5f5f5;
+    color: #000;
+    border: 1px solid #ccc;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+  }
+
+  .summary-toggle-button:hover {
+    background-color: #e0e0e0;
+  }
+
+  .summary-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.6s ease, padding 0.3s ease;
+    margin-top: 0;
+  }
+
+  .summary-panel-open {
+    max-height: 900px; // allow space for the iframe
+    margin-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .summary-pdf {
+    width: 100%;
+    height: 800px;
+    border: none;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
